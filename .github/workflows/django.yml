@@ -47,11 +47,10 @@ jobs:
 
     - name: Expose Django via Serveo
       run: |
-        cd myproject
-        python manage.py runserver 0.0.0.0:8000 &
-        ssh -R 80:localhost:8000 serveo.net > serveo_url.txt 2>&1 &
+        ssh -o StrictHostKeyChecking=no -T -R 80:localhost:8000 serveo.net > serveo_url.txt 2>&1 &
         sleep 5
         cat serveo_url.txt
+
 
         
     - name: Show Django URL
