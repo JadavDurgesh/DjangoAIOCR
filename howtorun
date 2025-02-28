@@ -1,0 +1,20 @@
+token= 
+  in github codespace create new codespace with this repo 
+
+unset GITHUB_TOKEN
+
+gh auth login
+>GitHub.com
+  >HTTPS
+    > select n
+      > select Past token option
+
+generate token:
+
+goto : https://github.com/settings/personal-access-tokens
+
+give all repo read/write permissions 
+
+copy that token 
+
+
