@@ -10,9 +10,3 @@ def json_pretty(value):
         return json.dumps(value, indent=4)
     except Exception:
         return value
-
-
-@register.filter
-def get_item(dictionary, key):
-    """Retrieve a value from a dictionary using the given key."""
-    return dictionary.get(key, "")
