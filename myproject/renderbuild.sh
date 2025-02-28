@@ -11,8 +11,9 @@ python -m pip install --upgrade pip gdown django djangorestframework pillow torc
 
 echo "Downloading model from Google Drive..."
 cd myapp
+ls
 gdown https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv
 cd ..
-
+ls
 echo "Running tests..."
 python manage.py test
