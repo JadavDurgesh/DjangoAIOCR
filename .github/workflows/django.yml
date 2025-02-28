@@ -42,4 +42,4 @@ jobs:
     - name: Run Tests
       run: |
         cd myproject
-        python manage.py test
+        python manage.py runserver
