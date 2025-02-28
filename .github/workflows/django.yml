@@ -45,13 +45,13 @@ jobs:
         echo "Runner IP: $(hostname -I)"
         echo "RUNNER_IP=$(hostname -I | awk '{print $1}')" >> $GITHUB_ENV
 
-    - name: Expose Django via Localhost.run
+    - name: Expose Django via 
       run: |
         cd myproject
         python manage.py runserver 0.0.0.0:8000 &
-        ssh -o StrictHostKeyChecking=no -T -R 80:localhost:8000 localhost.run > localhost_url.txt 2>&1 &
+        ssh -o StrictHostKeyChecking=no -T -R 80:localhost:8000 serveo.net > serveo_url.txt 2>&1 &
         sleep 5
-        cat localhost_url.txt
+        cat serveo_url.txt
        
     - name: Show Django URL
       run: |
