@@ -5,7 +5,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-  workflow_dispatch:  # 👈 Add this line to enable manual triggering
+  #workflow_dispatch:  # 👈 Add this line to enable manual triggering
 
 jobs:
   build:
@@ -40,7 +40,22 @@ jobs:
         cd myapp
         gdown https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv
 
-    - name: Run Tests
+    - name: Get GitHub Actions Runner IP
+      run: |
+        echo "Runner IP: $(hostname -I)"
+        echo "RUNNER_IP=$(hostname -I | awk '{print $1}')" >> $GITHUB_ENV
+
+    - name: Run Django Server
       run: |
         cd myproject
-        python manage.py runserver 0.0.0.0:8000 &
+        python manage.py runserver $RUNNER_IP:8000 &
+        
+    - name: Show Django URL
+      run: |
+        echo "Your Django server is running at http://$RUNNER_IP:8000"
+    
+    - name: Test Django Server
+      run: |
+        curl -I http://$RUNNER_IP:8000
+
+
