@@ -8,7 +8,7 @@ echo "Installing Python dependencies..."
 cd myproject
 ls
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirement.txt
 ls
 echo "Downloading model from Google Drive..."
 cd myapp
