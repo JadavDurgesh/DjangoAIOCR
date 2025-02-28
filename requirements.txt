@@ -1,0 +1,9 @@
+django
+djangorestframework
+pillow
+#torch
+torchvision
+opencv-python
+pytesseract
+#numpy
+gdown
