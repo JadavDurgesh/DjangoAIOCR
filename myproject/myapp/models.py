@@ -4,7 +4,7 @@ from django.db import models
 
 
 class ExtractedData(models.Model):
-    image = models.ImageField(upload_to="uploads/")
+    image = models.FileField(upload_to="uploads/")
     extracted_json = models.JSONField()
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
