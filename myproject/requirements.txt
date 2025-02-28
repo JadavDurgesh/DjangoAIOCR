@@ -5,5 +5,6 @@ pillow
 torchvision
 opencv-python
 pytesseract
+pypdf2
 #numpy
 gdown
