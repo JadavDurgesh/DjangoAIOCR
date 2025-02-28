@@ -7,3 +7,5 @@ opencv-python
 pytesseract
 #numpy
 gdown
+pdf2image
+pypdf2
