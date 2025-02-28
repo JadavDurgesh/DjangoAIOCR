@@ -2,19 +2,19 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Image Upload</title>
+  <title>Upload PDF or Images</title>
 </head>
 <body>
-  <h1>Upload an Image</h1>
-  <form action="{% url 'upload-image' %}" 
+  <h1>Upload PDF or Images</h1>
+  <form action="{% url 'upload' %}" 
         method="POST" 
         enctype="multipart/form-data">
-    <label for="image">Choose an image to upload:</label>
+    <label for="files">Choose PDF or images to upload:</label>
     <br><br>
     {% csrf_token %}
-    <input type="file" id="image" name="image" accept="image/*" multiple required />
+    <input type="file" id="files" name="files" accept="image/*,application/pdf" multiple required />
     <br><br>
-    <button type="submit">Upload Image</button>
+    <button type="submit">Upload Files</button>
   </form>
 </body>
 </html>
