@@ -2,7 +2,7 @@
 set -e  # Exit on error
 
 echo "Updating system packages..."
-apt-get update && apt-get install -y tesseract-ocr libtesseract-dev libgl1
+apt-get clean && apt-get update --allow-releaseinfo-change && apt-get install -y --no-install-recommends tesseract-ocr libtesseract-dev libgl1
 
 echo "Installing Python dependencies..."
 cd myproject
