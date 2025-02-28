@@ -15,41 +15,49 @@ class UploadExtractImageView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        if 'image' not in request.FILES:
-            return JsonResponse({'error': 'No image file provided'}, status=400)
+        if 'images' not in request.FILES:
+            return JsonResponse({'error': 'No image files provided'}, status=400)
 
-        image_file = request.FILES['image']
+        images = request.FILES.getlist('images')  # Get multiple files
         upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
         os.makedirs(upload_dir, exist_ok=True)
-        image_path = os.path.join(upload_dir, image_file.name)
+
+        extracted_results = []
 
         try:
-            with open(image_path, "wb+") as destination:
-                for chunk in image_file.chunks():
-                    destination.write(chunk)
+            for image_file in images:
+                image_path = os.path.join(upload_dir, image_file.name)
 
-            # Extract text using Faster R-CNN & OCR
-            extracted_data = detect_text(image_path)
+                # Save image to disk
+                with open(image_path, "wb+") as destination:
+                    for chunk in image_file.chunks():
+                        destination.write(chunk)
 
-            # Save to database
-            extracted_instance = ExtractedData.objects.create(
-                image=image_file, extracted_json=extracted_data
-            )
+                # Extract text using Faster R-CNN & OCR
+                extracted_data = detect_text(image_path)
 
-            # Save extracted data as JSON file
-            json_filename = os.path.join(upload_dir, "extracted_data.json")
-            with open(json_filename, "w") as json_file:
-                json.dump(extracted_data, json_file, indent=4)
+                # Save to database
+                extracted_instance = ExtractedData.objects.create(
+                    image=image_file, extracted_json=extracted_data
+                )
 
-            return JsonResponse({
-                'message': 'File uploaded and processed successfully',
-                'file_url': f"{settings.MEDIA_URL}uploads/{image_file.name}",
-                'json_file_url': f"{settings.MEDIA_URL}uploads/extracted_data.json",
-                'extracted_json': extracted_data
-            }, status=201)
+                # Save extracted data as JSON file
+                json_filename = os.path.join(upload_dir, f"{image_file.name}.json")
+                with open(json_filename, "w") as json_file:
+                    json.dump(extracted_data, json_file, indent=4)
+
+                extracted_results.append({
+                    'message': 'File uploaded and processed successfully',
+                    'file_url': f"{settings.MEDIA_URL}uploads/{image_file.name}",
+                    'json_file_url': f"{settings.MEDIA_URL}uploads/{image_file.name}.json",
+                    'extracted_json': extracted_data
+                })
+
+            return JsonResponse({'results': extracted_results}, status=201)
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+
         
 class GetExtractedDataView(APIView):
     def get(self, request, *args, **kwargs):
