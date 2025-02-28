@@ -31,7 +31,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         cd myproject
-        pip install -r requirement.txt  # confirm path/name
+        pip install -r requirements.txt  # confirm path/name
 
     - name: Download Model from Google Drive
       run: |
