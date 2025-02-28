@@ -12,7 +12,7 @@
     <label for="image">Choose an image to upload:</label>
     <br><br>
     {% csrf_token %}
-    <input type="file" id="image" name="image" accept="image/*" required />
+    <input type="file" id="image" name="image" accept="image/*" multiple required />
     <br><br>
     <button type="submit">Upload Image</button>
   </form>
