@@ -11,7 +11,7 @@ from .models import ExtractedData
 from .utils import detect_text
 from django.shortcuts import render
 
-class UploadExtractImageView(APIView):
+class UploadExtractDataView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
