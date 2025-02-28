@@ -7,9 +7,7 @@ apt-get update && apt-get install -y tesseract-ocr libtesseract-dev libgl1
 echo "Installing Python dependencies..."
 cd myproject
 
-python -m pip install --upgrade pip
-ls
-pip install -r requirement.txt
+python -m pip install --upgrade pip gdown django djangorestframework pillow torchvision opencv-python pytesseract
 
 echo "Downloading model from Google Drive..."
 cd myapp
