@@ -240,3 +240,74 @@ class GetExtractedDataView(APIView):
     
 def index(request):
     return render(request,"upload.html")
+def show_extracted_data(request):
+    extracted_data_qs = ExtractedData.objects.all()
+
+    if not extracted_data_qs.exists():
+        return render(request, "show_extracted.html", {"message": "No extracted data found."})
+
+    data_list = []
+    combined_dfs = []  # List to hold all DataFrames for the combined file
+
+    # Directory for generated Excel/CSV files
+    generated_dir = os.path.join(settings.MEDIA_ROOT, 'generated_files')
+    os.makedirs(generated_dir, exist_ok=True)
+
+    for data in extracted_data_qs:
+        # Use relative URL by simply concatenating settings.MEDIA_URL (which should start with a slash)
+        image_url = settings.MEDIA_URL + data.image.url.split(settings.MEDIA_URL)[-1]
+        
+        # Get the extracted JSON from the database; assume it is a list of dictionaries.
+        extracted = data.extracted_json
+        if not isinstance(extracted, list):
+            extracted = [extracted]
+
+        # Create a DataFrame from the extracted data
+        df = pd.DataFrame(extracted)
+        combined_dfs.append(df)
+
+        # Generate filenames based on the record's ID
+        base_filename = f"extracted_{data.id}"
+        excel_filename = f"{base_filename}.xlsx"
+        csv_filename = f"{base_filename}.csv"
+        excel_path = os.path.join(generated_dir, excel_filename)
+        csv_path = os.path.join(generated_dir, csv_filename)
+
+        # Save the DataFrame as Excel and CSV files
+        df.to_excel(excel_path, index=False)
+        df.to_csv(csv_path, index=False)
+
+        # Build relative URLs for the generated files
+        individual_excel_url = os.path.join(settings.MEDIA_URL, 'generated_files', excel_filename)
+        individual_csv_url = os.path.join(settings.MEDIA_URL, 'generated_files', csv_filename)
+
+        data_list.append({
+            "image_url": image_url,
+            "extracted_data": data.extracted_json,
+            "uploaded_at": data.uploaded_at.strftime('%Y-%m-%d %H:%M:%S'),
+            "individual_excel_url": individual_excel_url,
+            "individual_csv_url": individual_csv_url
+        })
+
+    # Create combined DataFrame and save as combined Excel and CSV files
+    if combined_dfs:
+        combined_df = pd.concat(combined_dfs, ignore_index=True)
+        combined_excel_filename = "combined_extracted.xlsx"
+        combined_csv_filename = "combined_extracted.csv"
+        combined_excel_path = os.path.join(generated_dir, combined_excel_filename)
+        combined_csv_path = os.path.join(generated_dir, combined_csv_filename)
+        combined_df.to_excel(combined_excel_path, index=False)
+        combined_df.to_csv(combined_csv_path, index=False)
+        combined_excel_url = os.path.join(settings.MEDIA_URL, 'generated_files', combined_excel_filename)
+        combined_csv_url = os.path.join(settings.MEDIA_URL, 'generated_files', combined_csv_filename)
+    else:
+        combined_excel_url = ""
+        combined_csv_url = ""
+
+    context = {
+        "extracted_results": data_list,
+        "combined_excel_file_url": combined_excel_url,
+        "combined_csv_file_url": combined_csv_url
+    }
+    return render(request, "show_extracted.html", context)
+
