@@ -1,13 +1,16 @@
-# Use official Python image
+# Use Python 3.12 image
 FROM python:3.12
 
-# Install system dependencies (including libGL.so.1 for OpenCV)
+# Install system dependencies (including OpenCV required libraries)
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     libtesseract-dev \
     poppler-utils \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -23,7 +26,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 RUN pip install gdown
 
 # Download model using gdown
-RUN python -c "import gdown; gdown.download('https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv', 'myapp/model_3.pth', quiet=False)"
+RUN mkdir -p myapp/models && \
+    python -c "import gdown; gdown.download('https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv', 'myapp/models/model_3.pth', quiet=False)"
 
 # Expose the port Railway provides
 EXPOSE $PORT
