@@ -17,11 +17,10 @@ COPY . /app
 
 # Install Python dependencies globally
 RUN pip install --upgrade pip && pip install -r requirements.txt
-
+RUN pip install gunicorn
 # Download model using gdown (make sure gdown is in requirements.txt or install it explicitly)
 RUN pip install gdown && \
-    mkdir -p myapp/models && \
-    python -c "import gdown; gdown.download('https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv', 'myapp/models/model_3.pth', quiet=False)"
+    python -c "import gdown; gdown.download('https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv', 'myapp/model_3.pth', quiet=False)"
 
 # Expose the port Railway provides
 EXPOSE $PORT
