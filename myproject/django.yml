@@ -29,17 +29,14 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        cd myproject
         pip install -r requirements.txt
         
     - name: Download Model from Google Drive
       run: |
         ls
-        cd myproject
         cd myapp
         gdown https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv
 
     - name: Run Tests
       run: |
-        cd myproject
         python manage.py runserver
