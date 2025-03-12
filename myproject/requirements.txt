@@ -13,3 +13,4 @@ gdown
 pandas
 openpyxl
 pymupdf
+gunicorn
