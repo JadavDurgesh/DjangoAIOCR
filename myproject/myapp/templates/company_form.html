@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Company Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Company Registration</h1>
+    <form method="POST" action="{% url 'company_create' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="company_name" class="form-label">Company Name</label>
+        <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Enter your company name" required>
+      </div>
+      <div class="mb-3">
+        <label for="company_email" class="form-label">Company Email</label>
+        <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Enter your company email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone</label>
+        <div class="input-group">
+          <span class="input-group-text">+91</span>
+          <input type="text" class="form-control" id="phone" name="phone" pattern='^\d{10}$' placeholder="Enter your phone number" required>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter your address" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="company_pan" class="form-label">Company PAN</label>
+        <input type="text" class="form-control" id="company_pan" name="company_pan" placeholder="Enter your company PAN" required>
+      </div>
+      <div class="mb-3">
+        <label for="company_gst" class="form-label">Company GST</label>
+        <input type="text" class="form-control" id="company_gst" name="company_gst" placeholder="Enter your company GST" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <a href="{% url 'index' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

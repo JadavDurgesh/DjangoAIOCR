@@ -1,0 +1,63 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:  # 👈 Add this line to enable manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12.1"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install system packages
+      run: |
+        sudo apt update && sudo apt install -y tesseract-ocr libtesseract-dev poppler-utils libgl1
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        cd myproject
+        pip install -r requirements.txt  # confirm path/name
+
+    - name: Download Model from Google Drive
+      run: |
+        ls
+        cd myproject
+        cd myapp
+        gdown https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv
+
+    - name: Get GitHub Actions Runner IP
+      run: |
+        echo "Runner IP: $(hostname -I)"
+        echo "RUNNER_IP=$(hostname -I | awk '{print $1}')" >> $GITHUB_ENV
+
+    - name: Expose Django via 
+      run: |
+        cd myproject
+        python manage.py runserver 0.0.0.0:8000 &
+        ssh -o StrictHostKeyChecking=no -T -R 80:localhost:8000 serveo.net > serveo_url.txt 2>&1 &
+        sleep 5
+        cat serveo_url.txt
+       
+    - name: Show Django URL
+      run: |
+        echo "Your Django server is running at http://$RUNNER_IP:8000"
+    
+    - name: Test Django Server
+      run: |
+        curl -I http://$RUNNER_IP:8000
+
+

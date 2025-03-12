@@ -1,0 +1,14 @@
+django
+djangorestframework
+pillow
+#torch
+torchvision
+opencv-python
+pytesseract
+pypdf2
+pdf2image
+#numpy
+gdown
+pandas
+openpyxl
+pymupdf
