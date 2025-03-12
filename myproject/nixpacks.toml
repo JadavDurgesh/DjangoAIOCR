@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["tesseract", "poppler", "libglvnd"]
+
+[phases.build]
+cmds = [
+  "pip install -r requirements.txt",
+  "python -c \"import gdown; gdown.download('https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv', 'myapp/model_3.pth', quiet=False)\""
+]
+
+[phases.start]
+cmd = "gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT"
