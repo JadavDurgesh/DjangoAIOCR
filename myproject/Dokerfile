@@ -16,8 +16,7 @@ WORKDIR /app
 COPY . /app
 
 # Install Python dependencies globally
-RUN pip install --upgrade pip && pip install -r requirements.txt
-RUN pip install gunicorn
+RUN pip install --upgrade pip && pip install -r requirements.txt 
 # Download model using gdown (make sure gdown is in requirements.txt or install it explicitly)
 RUN pip install gdown && \
     python -c "import gdown; gdown.download('https://drive.google.com/uc?id=1UXU1FV6ZNuB0HOJDrledlOjdkRNxLMZv', 'myapp/model_3.pth', quiet=False)"
@@ -26,4 +25,5 @@ RUN pip install gdown && \
 EXPOSE $PORT
 
 # Start the Django app using gunicorn
-CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["/opt/venv/bin/gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8000"]
+
