@@ -4,6 +4,7 @@ pillow
 #torch
 torchvision
 opencv-python
+opencv-python-headless
 pytesseract
 pypdf2
 pdf2image
